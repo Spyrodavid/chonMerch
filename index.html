@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="index.js" defer></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+    <div class="panel" id="background_selector"> 
+        <div class="prev" onclick="prev_background()">
+            Previous
+        </div>
+
+        <div class="next" onclick="next_background()">
+            Next
+        </div>
+    </div>
+
+    <div id="screen-layout">
+
+
+        <img id="background">
+
+        <div id="items_selection_area">
+            <div class="panel"> 
+                <div class="prev" onclick="prev_items()">
+                    Previous
+                </div>
+
+                <div class="next" onclick="next_items()">
+                    Next
+                </div>
+            </div>
+
+            <h2 id="items_title">
+                Heads
+            </h2>
+
+            <div class="items" id="heads" style="display: none;">
+                <div class="img_container">
+                    <img src="head/X.png" class="head">
+                </div>
+
+                <div class="img_container">
+                    <img src="head/doge.png" class="head">
+                </div>
+
+            </div>
+
+            <div class="items" id="shirts" style="display: none;">
+                <div class="img_container">
+                    <img src="shirt/supreme_drawn.png" class="shirt">
+                </div>
+
+                <div class="img_container">
+                    <img src="shirt/chon.png" class="shirt">
+                </div>
+            </div>
+
+            <div class="items" id="pants" style="display: none;">
+                
+            </div>            
+
+            <div class="items" id="accesories">
+                <img src="accesories/body_bag.png" class="accessory">
+            </div>
+            
+        </div>
+    </div>
+
+    <div id="commentary">
+            <div id="commentary-text">
+                You need a makeover
+            </div>
+
+            <img id="chon" src="chonshead.png">
+        </div>
+
+    
+    
+</body>
+</html>

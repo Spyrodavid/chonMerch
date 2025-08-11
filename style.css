@@ -1,0 +1,165 @@
+body {
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    font-family: "Pixelify Sans";
+
+    user-select: none;
+
+}
+
+#screen-layout {
+    display: grid;
+
+    grid-template-columns: 70% 30%;
+    
+    width: 100%;
+    height: 100%;
+}
+
+#background {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+}
+
+#items_selection_area {
+    display: flex;
+
+    width: 100%;
+    height: 100%;
+
+    flex-direction: column;
+
+}
+
+#items_title {
+    text-align: center;
+    width: 100%;
+
+}
+
+
+#commentary {
+    position: absolute;
+    width: 100%;
+    height: 20%;
+
+    display: grid;
+    grid-template-columns: 70% 30%;
+
+    bottom: 0px;
+
+}
+
+#commentary-text {
+    align-content: center;
+    text-align: center;
+    font-size: x-large;
+
+    background-color: #fecb0a;
+    outline: 2rem ridge #fecb0a;
+    border-radius: 2rem;
+    margin: 2rem;
+
+}
+
+#chon {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+}
+
+.panel {
+    display: flex;
+    justify-content: space-around;
+    text-decoration-line: underline;
+    cursor: pointer;
+}
+
+#background_selector {
+    position: absolute;
+    gap: 10px;
+}
+
+.items {
+    display: flex;
+
+    align-items: center;
+
+}
+
+#rotation_handle {
+    width: 10px;
+    height: 10px;
+    background-color: grey;
+    outline: 2px solid black;
+    border-radius: 100%;
+
+    cursor: pointer;
+
+    position: absolute;
+
+    top: -20px;
+
+    left: calc(50% - 5px);
+
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.content {
+    position: absolute;
+
+}
+
+@keyframes shake {
+  25%  {rotate: 1deg;}
+  50%  {rotate: 0deg;}
+  75% {rotate: -1deg;}
+}
+
+/* .dragging {
+    color: blue;
+
+    animation: infinite;
+    animation-duration: .2s;
+    animation-name: shake;
+    animation-timing-function: ease;
+    
+}
+
+.dragging, .selected {
+    transform: scale(1.05);
+}
+
+.selected {
+    color: red;
+} */
+
+
+.head {
+    width: 100px;
+    height: 100px;
+}
+
+.shirt {
+    width: 180px;
+    height: 200px;
+}
+
+.accessory {
+    width: 80px;
+    height: 80px;
+}
