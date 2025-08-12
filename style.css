@@ -6,6 +6,7 @@ body {
 
     user-select: none;
 
+    overflow: hidden;
 }
 
 #screen-layout {
@@ -44,7 +45,6 @@ body {
 #commentary {
     position: absolute;
     width: 100%;
-    height: 20%;
 
     display: grid;
     grid-template-columns: 70% 30%;
@@ -65,17 +65,16 @@ body {
 
 }
 
-#chon {
-    object-fit: contain;
-    width: 100%;
-    height: 100%;
-}
-
 .panel {
     display: flex;
     justify-content: space-around;
     text-decoration-line: underline;
     cursor: pointer;
+}
+
+#chon {
+    display: flex;
+    justify-content: center;
 }
 
 #background_selector {
@@ -90,33 +89,51 @@ body {
 
 }
 
-#rotation_handle {
+.handle {
     width: 10px;
     height: 10px;
-    background-color: grey;
     outline: 2px solid black;
-    border-radius: 100%;
-
     cursor: pointer;
 
     position: absolute;
-
-    top: -20px;
-
-    left: calc(50% - 5px);
-
-    
 }
 
+#rotation_handle {
 
+    background-color: grey;
+    border-radius: 100%;
+    top: -10px;
+    left: -10px;
 
+}
 
+#Yhandle {
 
+    background-color: red;
+    top: calc(-10px);
+    left: calc(50% - 5px);
+}
 
+#Xhandle {
 
+    background-color: blue;
+    top: calc(50% - 5px);
+    right: calc(-10px);
+}
 
+#XYhandle {
 
+    background-color: green;
+    top: calc(-10px);
+    right: calc(-10px);
+}
 
+#center {
+    visibility: hidden;
+    
+    top: calc(50%);
+    right: calc(50%);
+}
 
 
 .content {

@@ -48,7 +48,6 @@ function prev_background() {
     background_index %= backgrounds.length
     
     set_background()
-
 }
 
 
@@ -110,19 +109,20 @@ mouseY = 0
 
 for (continer of document.querySelectorAll(".img_container")) {
         continer.addEventListener("mousedown", function (e) {
+
         remove_item_from_list(e.currentTarget)
-    }, { once: true })
+    })
 }
 
 
 
 let dragging_element;
 let selected_element;
+let scaling_corner;
 let rotating = false;
 
-let hold_timer;
-let timer_done;
-var hold_duration = 500;
+
+current_rotation = 0
 
 function make_dragging(element) {
     remove_dragging()
@@ -138,21 +138,51 @@ function remove_dragging() {
 
 function make_selected(element) {
     remove_selected()
-    element.classList.add("selected");
+
+    element.classList.add("selected")
     selected_element = element
 
-    div = document.createElement("div")
-    div.id = "rotation_handle"
+    rot = document.createElement("div")
+    rot.classList.add("handle")
+    rot.id = "rotation_handle"
 
-    element.appendChild(div)
+    Xhandle = document.createElement("div")
+    Xhandle.classList.add("handle")
+    Xhandle.id = "Xhandle"
 
-    div.addEventListener("mousedown", () => {make_rotating();})
+    Yhandle = document.createElement("div")
+    Yhandle.classList.add("handle")
+    Yhandle.id = "Yhandle"
+
+    XYhandle = document.createElement("div")
+    XYhandle.classList.add("handle")
+    XYhandle.id = "XYhandle"
+
+    center = document.createElement("div")
+    center.classList.add("handle")
+    center.id = "center"
+
+
+    element.appendChild(rot)
+    element.appendChild(Xhandle)
+    element.appendChild(Yhandle)
+    element.appendChild(XYhandle)
+    element.appendChild(center)
+
+
+    rot.addEventListener("mousedown", () => {make_rotating()})
+    Xhandle.addEventListener("mousedown", () => {make_scaling(Xhandle)})
+    Yhandle.addEventListener("mousedown", () => {make_scaling(Yhandle)})
+    XYhandle.addEventListener("mousedown", () => {make_scaling(XYhandle)})
+
 
 }
 
 function remove_selected() {
     if (selected_element == undefined) return
-    selected_element.removeChild(document.getElementById("rotation_handle"))
+    for (handle of selected_element.querySelectorAll(".handle"))
+        selected_element.removeChild(handle)
+
     selected_element.classList.remove("selected");
     selected_element = undefined
 
@@ -166,36 +196,33 @@ function remove_rotating() {
     rotating = false
 }
 
+function make_scaling(corner) {
+    scaling_corner = corner
+}
+
+function remove_scaling() {
+    scaling_corner = undefined
+}
+
 
 // make it so content elements can be moved around screen
 function make_interactable(element) {
 
     // Handle click and hold
     element.addEventListener('mousedown', (e) => {
-        if (e.target.id == "rotation_handle")
+        if (e.target.classList.contains("handle"))
             return
-        console.log(e.target.id)
-
-        timer_done = false;
 
         make_dragging(element)
 
         element.style.zIndex = z_index
         z_index += 1
 
-        hold_timer = setTimeout(() => {
-            timer_done = true;
-
-        }, hold_duration);
     });
 
     element.addEventListener('mouseup', () => {
-        if (!timer_done) {
-            clearTimeout(hold_timer);
-            remove_dragging();
-            make_selected(element)
-        }
-
+        remove_dragging();
+        make_selected(element)
 
     });
 }
@@ -212,16 +239,81 @@ document.addEventListener("mousemove", (e) => {
         imgX = imgRect.left + imgRect.width / 2
         imgY = imgRect.top + imgRect.height / 2
 
+        selected_element.style.transform = `rotate(${Math.atan2(mouseY - imgY, mouseX - imgX) + 3 * Math.PI / 4}rad)`
 
-        selected_element.style.transform = `rotate(${Math.atan2(mouseY - imgY, mouseX - imgX) + Math.PI / 2}rad)`
-        console.log(mouseY, imgY, mouseX, imgY)
+        current_rotation = Math.atan2(mouseY - imgY, mouseX - imgX) + 3 * Math.PI / 4
     }
 
 
     if (dragging_element != undefined) {
 
-        dragging_element.style.top = parseInt(dragging_element.style.top) + (mouseY - prevY) +'px';
-        dragging_element.style.left = parseInt(dragging_element.style.left) + (mouseX - prevX) + 'px';
+        dragging_element.style.top = parseFloat(dragging_element.style.top) + (mouseY - prevY) +'px';
+        dragging_element.style.left = parseFloat(dragging_element.style.left) + (mouseX - prevX) + 'px';
+
+    }
+
+    if (scaling_corner != undefined) {
+        image = selected_element.querySelector("img")
+        if (scaling_corner.id == "Xhandle") {
+            rect = image.getBoundingClientRect()
+            scales = (image.style.scale).split(" ")
+            if (scales.length == 0)
+                scales.push("1")
+            if (scales.length == 1)
+                scales.push("1")
+            if (scales[0] == '')
+                scales[0] = '1'
+
+            mouseDelta = [mouseX - prevX, mouseY - prevY]
+            handleVector = [Math.cos(current_rotation), Math.sin(current_rotation)]
+            dotProduct = mouseDelta[0] * handleVector[0]+ mouseDelta[1] * handleVector[1]
+
+
+            image.style.scale = parseFloat(scales[0]) + 2 * dotProduct / image.width + " " + String(scales[1])
+        }
+
+        if (scaling_corner.id == "Yhandle") {
+            rect = image.getBoundingClientRect()
+            scales = (image.style.scale).split(" ")
+            if (scales.length == 0)
+                scales.push("1")
+            if (scales.length == 1)
+                scales.push("1")
+            if (scales[0] == '')
+                scales[0] = '1'
+
+            mouseDelta = [mouseX - prevX, mouseY - prevY]
+            handleVector = [Math.cos(current_rotation - Math.PI / 2), Math.sin(current_rotation - Math.PI / 2)]
+            dotProduct = mouseDelta[0] * handleVector[0] + mouseDelta[1] * handleVector[1]
+
+            
+
+            image.style.scale = String(scales[0]) + " " + (parseFloat(scales[1]) + (2 * dotProduct / image.height))
+
+        }
+
+        if (scaling_corner.id == "XYhandle") {
+            rect = image.getBoundingClientRect()
+            scales = (image.style.scale).split(" ")
+            if (scales.length == 0)
+                scales.push("1")
+            if (scales[0] == '')
+                scales[0] = '1'
+            if (scales.length == 1)
+                scales.push(scales[0])
+            
+
+
+            mouseDelta = [mouseX - prevX, mouseY - prevY]
+            handleVector = [Math.cos(current_rotation - Math.PI / 2), Math.sin(current_rotation - Math.PI / 2)]
+            YdotProduct = mouseDelta[0] * handleVector[0] + mouseDelta[1] * handleVector[1]
+
+            mouseDelta = [mouseX - prevX, mouseY - prevY]
+            handleVector = [Math.cos(current_rotation), Math.sin(current_rotation)]
+            XdotProduct = mouseDelta[0] * handleVector[0] + mouseDelta[1] * handleVector[1]
+
+            image.style.scale = (parseFloat(scales[0]) + 2 * XdotProduct / image.width) + " " + (parseFloat(scales[1]) + (2 * YdotProduct / image.height))
+        }
 
     }
 
@@ -230,9 +322,30 @@ document.addEventListener("mousemove", (e) => {
 document.addEventListener("mouseup", (e) => {
     remove_dragging()
     remove_rotating()
+    remove_scaling()
 })
 
 document.addEventListener("mousedown", (e) => {
-    if (e.target.id != "rotation_handle")
+    if (!e.target.classList.contains("handle"))
         remove_selected()
 })
+
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Delete' || event.key === 'Backspace') {
+    if (selected_element == undefined)
+        return
+    
+
+    image = selected_element.querySelector("img")
+
+    original = document.querySelector(`.items > .img_container > img[src*=\"${image.src.split("/")[4]}\"]`).parentElement
+
+    original.style.visibility = "visible"
+    selected_element.remove()
+
+    remove_selected()
+    remove_dragging()
+
+    
+  }
+});
