@@ -1,7 +1,7 @@
 items_order = ["heads", "shirts", "pants", "accesories"]
 items_index = 0
 
-backgrounds = ["the_hell.webp", "studio.png", "Chain.jpg"]
+backgrounds = ["The_Hell.webp", "studio.png", "Chain.jpg"]
 background_index = 0
 
 z_index = 1
